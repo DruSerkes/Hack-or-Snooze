@@ -187,6 +187,7 @@ $(async function() {
     elementsArr.forEach($elem => $elem.hide());
   }
 
+  //show logged in user nav 
   function showNavForLoggedInUser() {
     $navLogin.hide();
     $navLogOut.show();
