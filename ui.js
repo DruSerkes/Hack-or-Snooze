@@ -8,6 +8,7 @@ $(async function() {
   const $ownStories = $("#my-articles");
   const $navLogin = $("#nav-login");
   const $navLogOut = $("#nav-logout");
+  const $createStoryForm = $('#create-new-story');
 
   // global storyList variable
   let storyList = null;
@@ -19,7 +20,7 @@ $(async function() {
 
   /**
    * Event listener for logging in.
-   *  If successfully we will setup the user instance
+   *  If successful we will setup the user instance
    */
 
   $loginForm.on("submit", async function(evt) {

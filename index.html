@@ -12,8 +12,10 @@
 </head>
 
 <body>
+
   <nav>
     <b><a class="nav-link navbar-brand" href="#" id="nav-all">Hack or Snooze</a></b>
+    
     <a class="nav-link nav-right" href="#" id="nav-login">login/create user</a>
     <span class="nav-link nav-right hidden" id="nav-welcome">
       <a href="#" id="nav-user-profile"></a>
@@ -22,6 +24,30 @@
       <small>(logout)</small>
     </a>
   </nav>
+
+  <!-- Create new article container  -->
+  <section class="container">
+    <form action="#" class="account-form hidden" id="create-new-story" method='POST'>
+      <h4>Post New Article:</h4>
+      <div class="login-input">
+        <label for="article-title">Title: </label>
+        <input id="article-title" type="text" placeholder="article title">
+      </div>
+      <div class="login-input">
+        <label for="article-author">Author: </label>
+        <input id="article-author" type="text" placeholder="article author">
+      </div>
+      <div class="login-input">
+        <label for="article-url">Url: </label>
+        <input id="article-title" type="url" placeholder="article url">
+      </div>
+      <button type="submit">Submit</button>
+      <hr>
+    </form>
+    
+  </section>
+
+  <!-- articles container  -->
   <section class="articles-container container">
     <form action="" class="hidden" id="submit-form">
       <div>
@@ -57,6 +83,8 @@
       </ul>
     </article>
   </section>
+
+  <!-- edit articles  -->
   <section class="edit-article-container container">
     <form action="#" id="edit-article-form" class="hidden" method="post">
       <h4>Article Information</h4>
@@ -67,6 +95,8 @@
       </div>
     </form>
   </section>
+
+  <!-- login / create account  -->
   <section class="account-forms-container container">
     <form action="#" id="login-form" class="account-form hidden" method="post">
       <h4>Login</h4>
@@ -98,6 +128,8 @@
       <button type="submit">create account</button>
     </form>
   </section>
+
+  <!-- user profile  -->
   <section id="user-profile" class="container hidden">
     <h4>User Profile Info</h4>
     <section>
@@ -106,6 +138,8 @@
       <div id="profile-account-date">Account Created:</div>
     </section>
   </section>
+
+
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
   crossorigin="anonymous"></script>
