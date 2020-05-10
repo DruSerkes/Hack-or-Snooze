@@ -52,6 +52,7 @@ class StoryList {
     
     // Create new Story
     const storyObj = new Story(result.data);
+    //should I append storyObj to this.stories here or in ui? 
     return storyObj;
   }
 }

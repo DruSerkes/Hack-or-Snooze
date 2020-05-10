@@ -8,7 +8,9 @@ $(async function() {
   const $ownStories = $("#my-articles");
   const $navLogin = $("#nav-login");
   const $navLogOut = $("#nav-logout");
+  const $navMain = $('#nav-main');
   const $createStoryForm = $('#create-new-story');
+  const $navSubmit = $('#nav-submit');
 
   // global storyList variable
   let storyList = null;
@@ -57,6 +59,40 @@ $(async function() {
     syncCurrentUserToLocalStorage();
     loginAndSubmitForm();
   });
+
+
+  // Event listener to reveal Create New Story section
+  $navSubmit.on('click', function(evt) {
+    $createStoryForm.show();
+  }) 
+
+  // Event listener for creating a new story 
+  $createStoryForm.on('submit', async function(evt) {
+    evt.preventDefault(); // no page refresh
+
+    //grab required fields and create a newStory object
+    let title = $('#article-title').val();
+    let author = $('#article-author').val();
+    let url = $('#article-url').val();
+    let storyToAdd = {
+      title,
+      author,
+      url
+    };
+
+    // call addStory method on the storyList instance with currentUser and newStory
+    if (!currentUser){
+      return;
+    }
+    const newStory = await storyList.addStory(currentUser, storyToAdd);
+    storyList.append(newStory); //not sure if I should append here or in method definition 
+    $allStoriesList.append(newStory);
+  })
+
+
+  
+
+
 
   /**
    * Log Out Functionality
@@ -182,7 +218,8 @@ $(async function() {
       $filteredArticles,
       $ownStories,
       $loginForm,
-      $createAccountForm
+      $createAccountForm,
+      $createStoryForm
     ];
     elementsArr.forEach($elem => $elem.hide());
   }
@@ -190,6 +227,7 @@ $(async function() {
   //show logged in user nav 
   function showNavForLoggedInUser() {
     $navLogin.hide();
+    $navMain.show();
     $navLogOut.show();
   }
 
