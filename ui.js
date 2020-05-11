@@ -70,6 +70,11 @@ $(async function() {
   $createStoryForm.on('submit', async function(evt) {
     evt.preventDefault(); // no page refresh
 
+    // Check if logged in
+    if (!currentUser){
+      return;
+    }
+
     //grab required fields and create a newStory object
     let title = $('#article-title').val();
     let author = $('#article-author').val();
@@ -81,9 +86,6 @@ $(async function() {
     };
 
     // call addStory method on the storyList instance with currentUser and newStory
-    if (!currentUser){
-      return;
-    }
     const newStory = await storyList.addStory(currentUser, storyToAdd);
     storyList.append(newStory); //not sure if I should append here or in method definition 
     $allStoriesList.append(newStory);
@@ -209,6 +211,17 @@ $(async function() {
     return storyMarkup;
   }
 
+  /* function to prepend stars to li
+  / if parent element id is in currentUser.favorites, render a solid star, 
+  / else, render a star outline */
+
+  /* We'll also need an event listener for a click on the star to:  
+  / check if the parent element id is in favorites: 
+  / if so, user.removeFavorite(), and render 
+  */
+
+
+
   /* hide all elements in elementsArr */
 
   function hideElements() {
@@ -255,3 +268,5 @@ $(async function() {
     }
   }
 });
+
+
