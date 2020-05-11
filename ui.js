@@ -93,9 +93,6 @@ $(async function() {
   })
 
   
-
-
-
   /**
    * Log Out Functionality
    */
@@ -221,9 +218,19 @@ $(async function() {
   */
   $allStoriesList.on('click', 'i', async function(evt) {
     let parentLi = $(this).closest('li');
-    let id = parentLi.attr('id');
+    let storyId = parentLi.attr('id');
 
-    
+    //check if it's favorited 
+    if ($(this).hasClass('fas')){
+      //remove from favorites list 
+      await currentUser.removeFavoriteStory(storyId);
+      //update the dom 
+      $(this).closest('i').toggleClass("fas far");
+    } //otherwise make it a favorite
+    else {
+      await currentUser.addFavoriteStory(storyId);
+      $(this).closest('i').toggleClass("fas far");
+    }
     
   });
 

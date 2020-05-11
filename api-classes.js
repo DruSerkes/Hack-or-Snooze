@@ -158,28 +158,43 @@ class User {
     return existingUser;
   }
 
-  // Add a favorite story
-  async addFavoriteStory(user, storyId){
-    // Send favorite request to server - returns partial user object 
-    const result = await axios.post(`${BASE_URL}/users/${user.username}/favorites/${storyId}`, { params: {
-      token: user.token
+  /* This function uses a username and token to get user info from the API
+  and updates the instance of the user object with the response  */
+
+  async getUserInfo(){
+    const response = await axios.get(`${BASE_URL}/${this.username}`, {params: {
+      token: this.loginToken
     }});
 
-    // update and return this instance of User 
-    this.favorites = result.data.user.favorites.map(s => new Story(s)); 
+    this.name = response.data.user.name;
+    this.createdAt = response.data.user.createdAt;
+    this.updatedAt = response.data.user.updatedAt;
+    this.favorites = this.data.user.favorites.map(s => new Story(s));
+    this.ownStories = this.data.user.stories.map(s => new Story(s));
+    
     return this;
   }
 
+  // Add a favorite story //TODO figure out why this isn't working 
+  async addFavoriteStory(storyId){
+    // Send favorite request to server - returns partial user object 
+    const result = await axios.post(`${BASE_URL}/users/${this.username}/favorites/${storyId}`, { params: {
+      token: this.loginToken
+    }});
+
+    // update and return this instance of User 
+    return await this.getUserInfo(); 
+  }
+
   // Remove a favorite story 
-  async removeFavoriteStory(){
+  async removeFavoriteStory(storyId){
     // Send delete request to server 
-    const result = await axios.delete(`${BASE_URL}/users/${user.username}/favorites/${storyId}`, { params: {
-      token: user.token
+    const result = await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${storyId}`, { params: {
+      token: this.loginToken
     }});
     
     // update and return this instance of User 
-    this.favorites = result.data.user.favorites.map(s => new Story(s)); 
-    return this;
+    return await this.getUserInfo(); 
   }
 }
 
