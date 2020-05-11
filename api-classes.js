@@ -64,9 +64,9 @@ class StoryList {
 
   async deleteStory(user, idToRemove){
     //Delete request for story 
-    const result = await axios.delete(`${BASE_URL}/stories/${idToRemove}`, {
-      token: user.loginToken,
-    });
+    const result = await axios.delete(`${BASE_URL}/stories/${idToRemove}`, { data: {
+      token: user.loginToken
+    }});
     const deletedStory = new Story(result.data.story);
 
     //remove it from this list 

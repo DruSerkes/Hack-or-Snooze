@@ -120,12 +120,16 @@ $(async function() {
   });
 
   // Event listener for deleting a story 
-  $myStories.on('click', 'i', function (evt) {
+  $myStories.on('click', '.fa-trash-alt', async function (evt) {
+    if (!currentUser){
+      return null;
+    }
+
     //get idToRemove from parent El
     let idToRemove = $(this).closest('li').attr('id');
 
     // Call deleteStory to handle memory 
-    const deletedStory = storyList.deleteStory(currentUser, idToRemove);
+    const deletedStory = await storyList.deleteStory(currentUser, idToRemove);
 
     //update DOM 
     $(this).closest('li').remove();
@@ -284,24 +288,23 @@ $(async function() {
     return storyMarkup;
   }
 
-/* TODO  Event listener for click on the star to:
-  * check if the parent element id is in favorites: 
-  * if so, currentUser.removeFavorite(), and render 
-  * Otherwise, currentUser.addFavoriteStory(), and render
+  /* 
+  * Event handler for favoriting
   */
+
   $allLists.on('click', '.fa-star', async function(evt) {
     if(!currentUser){
       return null;
     }
     let parentLi = $(this).closest('li');
     let storyId = parentLi.attr('id');
-    //check if it's favorited 
+    //check if it's already favorited 
     if ($(this).hasClass('fas')){
       //remove from favorites list 
       await currentUser.removeFavoriteStory(storyId);
       //update the dom 
       $(this).closest('i').toggleClass("fas far");
-    } //otherwise make it a favorite
+    } 
     else {
       await currentUser.addFavoriteStory(storyId);
       $(this).closest('i').toggleClass("far fas");
