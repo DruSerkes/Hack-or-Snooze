@@ -88,9 +88,9 @@ $(async function() {
     // call addStory method on the storyList instance with currentUser and newStory
     const newStory = await storyList.addStory(currentUser, storyToAdd);
     await generateStories();
-    $createStoryForm.slideToggle();
+    $createStoryForm.slideUp();
+    $createStoryForm.trigger('reset');
   })
-
 
   
 
