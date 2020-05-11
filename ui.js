@@ -211,6 +211,16 @@ $(async function() {
     return storyMarkup;
   }
 
+  function addStars(){
+    for (let story of storyList){
+      if (story in currentUser.favorites){
+        $(`${story.storyId}`).prepend(<i class="far fa-star"></i>);
+      }
+      else {
+        $(`${story.storyId}`).prepend(<i class="fas fa-star"></i>);
+      }
+    }
+  }
   /* function to prepend stars to li
   / if parent element id is in currentUser.favorites, render a solid star, 
   / else, render a star outline */
