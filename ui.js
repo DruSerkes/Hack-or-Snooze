@@ -11,6 +11,10 @@ $(async function() {
   const $navMain = $('#nav-main');
   const $createStoryForm = $('#create-new-story');
   const $navSubmit = $('#nav-submit');
+  const $navFavorites = $('#nav-favorites');
+  const $favoriteArticles = $('#favorite-articles-list');
+  const $navMyStories = $('#nav-my-stories');
+  const $myStories = $('#my-stories-list');
 
   // global storyList variable
   let storyList = null;
@@ -63,8 +67,47 @@ $(async function() {
 
   // Event listener to reveal Create New Story section
   $navSubmit.on('click', function(evt) {
+    hideElements();
     $createStoryForm.show();
-  }) 
+  }); 
+
+  // Event listener to reveal favorites section
+  $navFavorites.on('click', function(evt){
+    hideElements();
+    $favoriteArticles.empty();
+
+    if(currentUser.favorites.length === 0){
+      result = $('<p>No favorites added!</p>');
+      $favoriteArticles.append(result);
+    }
+    else {
+      for (let story of currentUser.favorites){
+        result = generateStoryHTML(story);
+        $favoriteArticles.append(result);
+      }
+    }
+    
+    $favoriteArticles.show();
+  });
+
+  // Event listener to reveal My Stories section
+  $navMyStories.on('click', function(evt){
+    hideElements();
+    $myStories.empty();
+
+    if(currentUser.ownStories.length === 0){
+      result = $('<p>No stories added!</p>');
+      $myStories.append(result);
+    }
+    else{
+      for (let story of currentUser.ownStories){
+        result = generateStoryHTML(story);
+        $myStories.append(result);
+      }
+    }
+    
+    $myStories.show();
+  });
 
   // Event listener for creating a new story 
   $createStoryForm.on('submit', async function(evt) {
@@ -87,12 +130,18 @@ $(async function() {
 
     // call addStory method on the storyList instance with currentUser and newStory
     const newStory = await storyList.addStory(currentUser, storyToAdd);
-    await generateStories();
+    
+    //append it to the DOM
+    let storyLi = generateStoryHTML(newStory);
+    $allStoriesList.prepend(storyLi);
+
+    //show DOM content 
     $createStoryForm.slideUp();
     $createStoryForm.trigger('reset');
+    $allStoriesList.show();
   })
 
-  
+
   /**
    * Log Out Functionality
    */
@@ -253,7 +302,9 @@ $(async function() {
       $ownStories,
       $loginForm,
       $createAccountForm,
-      $createStoryForm
+      $createStoryForm,
+      $favoriteArticles,
+      $myStories
     ];
     elementsArr.forEach($elem => $elem.hide());
   }
