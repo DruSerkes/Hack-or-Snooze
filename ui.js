@@ -313,7 +313,7 @@ $(async function() {
   function isFavorite(story){
     if (currentUser){
       let favoriteStoryIds = new Set(currentUser.favorites.map(obj => obj.storyId));
-      return favoriteStoryIds.has(story.id);
+      return favoriteStoryIds.has(story.storyId);
     }
   }
 

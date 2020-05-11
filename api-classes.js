@@ -204,7 +204,7 @@ class User {
     return this;
   }
 
-  // Add a favorite story //TODO figure out why this isn't working 
+  // Add a favorite story
   async addFavoriteStory(storyId){
     return this.toggleFavorite(storyId, "POST");
   }
