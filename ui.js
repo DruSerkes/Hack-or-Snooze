@@ -12,9 +12,9 @@ $(async function() {
   const $createStoryForm = $('#create-new-story');
   const $navSubmit = $('#nav-submit');
   const $navFavorites = $('#nav-favorites');
-  const $favoriteArticles = $('#favorite-articles-list');
+  const $favoriteArticles = $('#favorited-articles');
   const $navMyStories = $('#nav-my-stories');
-  const $myStories = $('#my-stories-list');
+  const $myStories = $('#my-articles');
 
   // global storyList variable
   let storyList = null;
@@ -103,7 +103,7 @@ $(async function() {
       for (let story of currentUser.ownStories){
         let hostName = getHostName(story.url);
         result = $(
-        `<li><span><i class="far fa-trash-alt"></i></span>
+        `<li id='${story.storyId}'><span><i id='delete' class="far fa-trash-alt"></i></span>
         <a class="article-link" href="${story.url}" target="a_blank">
         <strong>${story.title}</strong>
         </a>
@@ -119,8 +119,15 @@ $(async function() {
   });
 
   // Event listener for deleting a story 
-  $('.fa-trash-alt').on('click', function (evt) {
-    
+  $myStories.on('click', 'i', function (evt) {
+    //get idToRemove from parent El
+    let idToRemove = $(this).closest('li').attr('id');
+
+    // Call deleteStory to handle memory 
+    const deletedStory = storyList.deleteStory(currentUser, idToRemove);
+
+    //update DOM 
+    $(this).closest('li').remove();
   })
 
 
@@ -277,13 +284,16 @@ $(async function() {
   }
 
 /* TODO  an event listener for a click on the star to:  
-  / check if the parent element id is in favorites: 
-  / if so, user.removeFavorite(), and render 
+  * check if the parent element id is in favorites: 
+  * if so, currentUser.removeFavorite(), and render 
+  * Otherwise, currentUser.addFavoriteStory(), and render
   */
   $allStoriesList.on('click', 'i', async function(evt) {
+    if(!currentUser){
+      return null;
+    }
     let parentLi = $(this).closest('li');
     let storyId = parentLi.attr('id');
-
     //check if it's favorited 
     if ($(this).hasClass('fas')){
       //remove from favorites list 
@@ -298,6 +308,7 @@ $(async function() {
     
   });
 
+  //Helper function for determining if a story is favorite or not 
   
   function isFavorite(story){
     if (currentUser){

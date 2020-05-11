@@ -53,6 +53,33 @@ class StoryList {
     user.ownStories.unshift(storyObj);
     return storyObj;
   }
+
+  /*
+  * Method to make a DELETE request to /stories and remove the story from the list 
+  * - user - current instance of User who will remove the story
+  * - idToRemove - the id of the story to delete 
+  * 
+  * Returns deleted story object  
+  */
+
+  async deleteStory(user, idToRemove){
+    //Delete request for story 
+    const result = await axios.delete(`${BASE_URL}/stories/${idToRemove}`, {
+      token: user.loginToken,
+    });
+    const deletedStory = new Story(result.data.story);
+
+    //remove it from this list 
+    let storyListIdxToRemove = this.stories.findIndex(story => story.storyId === deletedStory.storyId);
+    this.stories.splice(storyListIdxToRemove, 1);
+
+    //remove it from current users ownStories
+    let ownStoriesIdxToRemove = user.ownStories.findIndex(story => story.storyId === deletedStory.storyId);
+    user.ownStories.splice(ownStoriesIdxToRemove, 1);
+
+    
+    return deletedStory;
+  }
 }
 
 
@@ -161,9 +188,9 @@ class User {
   and updates the instance of the user object with the response  */
 
   async getUserInfo(){
-    const response = await axios.get(`${BASE_URL}/${this.username}`, {params: {
+    const response = await axios.get(`${BASE_URL}/${this.username}`, {
       token: this.loginToken
-    }});
+    });
 
     this.name = response.data.user.name;
     this.createdAt = response.data.user.createdAt;
@@ -176,10 +203,11 @@ class User {
 
   // Add a favorite story //TODO figure out why this isn't working 
   async addFavoriteStory(storyId){
+    debugger
     // Send favorite request to server - returns partial user object 
-    const result = await axios.post(`${BASE_URL}/users/${this.username}/favorites/${storyId}`, { params: {
+    const result = await axios.post(`${BASE_URL}/users/${this.username}/favorites/${storyId}`, {
       token: this.loginToken
-    }});
+    });
 
     // update and return this instance of User 
     return await this.getUserInfo(); 
@@ -188,9 +216,9 @@ class User {
   // Remove a favorite story 
   async removeFavoriteStory(storyId){
     // Send delete request to server 
-    const result = await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${storyId}`, { params: {
+    const result = await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${storyId}`, {
       token: this.loginToken
-    }});
+    });
     
     // update and return this instance of User 
     return await this.getUserInfo(); 
