@@ -15,6 +15,7 @@ $(async function() {
   const $favoriteArticles = $('#favorited-articles');
   const $navMyStories = $('#nav-my-stories');
   const $myStories = $('#my-articles');
+  const $allLists = $('#all-lists');
 
   // global storyList variable
   let storyList = null;
@@ -283,12 +284,12 @@ $(async function() {
     return storyMarkup;
   }
 
-/* TODO  an event listener for a click on the star to:  WHY IS THIS BROKEN?
+/* TODO  Event listener for click on the star to:
   * check if the parent element id is in favorites: 
   * if so, currentUser.removeFavorite(), and render 
   * Otherwise, currentUser.addFavoriteStory(), and render
   */
-  $allStoriesList.on('click', '.fa-star', async function(evt) {
+  $allLists.on('click', '.fa-star', async function(evt) {
     if(!currentUser){
       return null;
     }
