@@ -195,12 +195,13 @@ $(async function() {
 
   function generateStoryHTML(story) {
     let hostName = getHostName(story.url);
+    let star = isFavorite(story) ? "fas fa-star" : "far fa-star";
 
     // render story markup
     const storyMarkup = $(`
       <li id="${story.storyId}">
         <span>
-        <i class="far fa-star"></i>
+        <i class="${star}"></i>
         </span>
         <a class="article-link" href="${story.url}" target="a_blank">
           <strong>${story.title}</strong>
@@ -214,21 +215,22 @@ $(async function() {
     return storyMarkup;
   }
 
-
-  $allStoriesList.on('click', 'i', async function(evt) {
-    let parentLi = $(this).closest('li');
-    let 
-    
-    
-  });
-  
-  /* We'll also need an event listener for a click on the star to:  
+/* TODO  an event listener for a click on the star to:  
   / check if the parent element id is in favorites: 
   / if so, user.removeFavorite(), and render 
   */
+  $allStoriesList.on('click', 'i', async function(evt) {
+    let parentLi = $(this).closest('li');
+    let id = parentLi.attr('id');
+
+    
+    
+  });
+
+  
   function isFavorite(story){
     if (currentUser){
-      let favoriteStoryIds = new Set(currentUser.favorites.map(story => story.id));
+      let favoriteStoryIds = new Set(currentUser.favorites.map(obj => obj.storyId));
       return favoriteStoryIds.has(story.id);
     }
   }
