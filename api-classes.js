@@ -188,41 +188,45 @@ class User {
   and updates the instance of the user object with the response  */
 
   async getUserInfo(){
-    const response = await axios.get(`${BASE_URL}/${this.username}`, {
-      token: this.loginToken
+    const response = await axios.get(`${BASE_URL}/users/${this.username}`, {
+      params: {
+        token: this.loginToken
+      }
     });
 
+    // update user properties from API response
     this.name = response.data.user.name;
     this.createdAt = response.data.user.createdAt;
     this.updatedAt = response.data.user.updatedAt;
-    this.favorites = this.data.user.favorites.map(s => new Story(s));
-    this.ownStories = this.data.user.stories.map(s => new Story(s));
-    
+    this.favorites = response.data.user.favorites.map(s => new Story(s));
+    this.ownStories = response.data.user.stories.map(s => new Story(s));
+
     return this;
   }
 
   // Add a favorite story //TODO figure out why this isn't working 
   async addFavoriteStory(storyId){
-    debugger
-    // Send favorite request to server - returns partial user object 
-    const result = await axios.post(`${BASE_URL}/users/${this.username}/favorites/${storyId}`, {
-      token: this.loginToken
-    });
-
-    // update and return this instance of User 
-    return await this.getUserInfo(); 
+    return this.toggleFavorite(storyId, "POST");
   }
 
   // Remove a favorite story 
   async removeFavoriteStory(storyId){
-    // Send delete request to server 
-    const result = await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${storyId}`, {
-      token: this.loginToken
-    });
-    
-    // update and return this instance of User 
-    return await this.getUserInfo(); 
+    return this.toggleFavorite(storyId, "DELETE");
   }
+
+  async toggleFavorite(storyId, httpVerb) {
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
+      method: httpVerb,
+      data: {
+        token: this.loginToken
+      }
+    });
+
+    await this.getUserInfo();
+    return this;
+  }
+
 }
 
 /**

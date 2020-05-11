@@ -283,12 +283,12 @@ $(async function() {
     return storyMarkup;
   }
 
-/* TODO  an event listener for a click on the star to:  
+/* TODO  an event listener for a click on the star to:  WHY IS THIS BROKEN?
   * check if the parent element id is in favorites: 
   * if so, currentUser.removeFavorite(), and render 
   * Otherwise, currentUser.addFavoriteStory(), and render
   */
-  $allStoriesList.on('click', 'i', async function(evt) {
+  $allStoriesList.on('click', '.fa-star', async function(evt) {
     if(!currentUser){
       return null;
     }
@@ -303,7 +303,7 @@ $(async function() {
     } //otherwise make it a favorite
     else {
       await currentUser.addFavoriteStory(storyId);
-      $(this).closest('i').toggleClass("fas far");
+      $(this).closest('i').toggleClass("far fas");
     }
     
   });
