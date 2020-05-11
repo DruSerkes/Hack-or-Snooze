@@ -87,8 +87,8 @@ $(async function() {
 
     // call addStory method on the storyList instance with currentUser and newStory
     const newStory = await storyList.addStory(currentUser, storyToAdd);
-    storyList.append(newStory); //not sure if I should append here or in method definition 
-    $allStoriesList.append(newStory);
+    await generateStories();
+    $createStoryForm.slideToggle();
   })
 
 
@@ -215,11 +215,12 @@ $(async function() {
   }
 
 
-  // $('i').on('click', async function(evt) {
-  //   let parentId = $(this).parent().attr('id');
+  $allStoriesList.on('click', 'i', async function(evt) {
+    let parentLi = $(this).closest('li');
+    let 
     
     
-  // });
+  });
   /* We'll also need an event listener for a click on the star to:  
   / check if the parent element id is in favorites: 
   / if so, user.removeFavorite(), and render 
