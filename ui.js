@@ -221,11 +221,17 @@ $(async function() {
     
     
   });
+  
   /* We'll also need an event listener for a click on the star to:  
   / check if the parent element id is in favorites: 
   / if so, user.removeFavorite(), and render 
   */
-
+  function isFavorite(story){
+    if (currentUser){
+      let favoriteStoryIds = new Set(currentUser.favorites.map(story => story.id));
+      return favoriteStoryIds.has(story.id);
+    }
+  }
 
 
   /* hide all elements in elementsArr */
