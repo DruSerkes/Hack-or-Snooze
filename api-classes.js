@@ -158,6 +158,15 @@ class User {
     existingUser.ownStories = response.data.user.stories.map(s => new Story(s));
     return existingUser;
   }
+
+  favoriteStory(story){
+    this.favorites.push(story);
+  }
+
+  unfavoriteStory(story){
+    let idxToRemove = this.favorites.indexOf(s => s === story);
+    this.favorites.splice(idxToRemove, 1);
+  }
 }
 
 /**
