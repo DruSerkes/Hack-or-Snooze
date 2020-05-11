@@ -160,23 +160,27 @@ class User {
   }
 
   // Add a favorite story
-  async favoriteStory(user, storyId){
-
+  async addFavoriteStory(user, storyId){
     // Send favorite request to server - returns partial user object 
     const result = await axios.post(`${BASE_URL}/users/${user.username}/favorites/${storyId}`, { params: {
       token: user.token
     }});
 
-    // update this instance of user 
-    this.favorites = result.data.favorites; 
-
-    //TODO do I have to call getLoggedInUser to update currentUser or can I use this return? 
+    // update and return this instance of User 
+    this.favorites = result.data.user.favorites.map(s => new Story(s)); 
+    return this;
   }
 
-  //TODO update this function to interact with API  
-  unfavoriteStory(story){
-    let idxToRemove = this.favorites.indexOf(s => s === story);
-    this.favorites.splice(idxToRemove, 1);
+  // Remove a favorite story 
+  async removeFavoriteStory(){
+    // Send delete request to server 
+    const result = await axios.delete(`${BASE_URL}/users/${user.username}/favorites/${storyId}`, { params: {
+      token: user.token
+    }});
+    
+    // update and return this instance of User 
+    this.favorites = result.data.user.favorites.map(s => new Story(s)); 
+    return this;
   }
 }
 

@@ -199,6 +199,9 @@ $(async function() {
     // render story markup
     const storyMarkup = $(`
       <li id="${story.storyId}">
+        <span>
+        <i class="far fa-star"></i>
+        </span>
         <a class="article-link" href="${story.url}" target="a_blank">
           <strong>${story.title}</strong>
         </a>
@@ -211,20 +214,12 @@ $(async function() {
     return storyMarkup;
   }
 
-  function addStars(){
-    for (let story of storyList){
-      if (story in currentUser.favorites){
-        $(`${story.storyId}`).prepend(<i class="far fa-star"></i>);
-      }
-      else {
-        $(`${story.storyId}`).prepend(<i class="fas fa-star"></i>);
-      }
-    }
-  }
-  /* function to prepend stars to li
-  / if parent element id is in currentUser.favorites, render a solid star, 
-  / else, render a star outline */
 
+  // $('i').on('click', async function(evt) {
+  //   let parentId = $(this).parent().attr('id');
+    
+    
+  // });
   /* We'll also need an event listener for a click on the star to:  
   / check if the parent element id is in favorites: 
   / if so, user.removeFavorite(), and render 
