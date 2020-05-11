@@ -101,13 +101,28 @@ $(async function() {
     }
     else{
       for (let story of currentUser.ownStories){
-        result = generateStoryHTML(story);
+        let hostName = getHostName(story.url);
+        result = $(
+        `<li><span><i class="far fa-trash-alt"></i></span>
+        <a class="article-link" href="${story.url}" target="a_blank">
+        <strong>${story.title}</strong>
+        </a>
+        <small class="article-author">by ${story.author}</small>
+        <small class="article-hostname ${hostName}">(${hostName})</small>
+        <small class="article-username">posted by ${story.username}</small>
+        </li>`);
         $myStories.append(result);
       }
     }
     
     $myStories.show();
   });
+
+  // Event listener for deleting a story 
+  $('.fa-trash-alt').on('click', function (evt) {
+    
+  })
+
 
   // Event listener for creating a new story 
   $createStoryForm.on('submit', async function(evt) {
