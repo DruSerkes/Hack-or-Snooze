@@ -254,7 +254,11 @@ class User {
    * - updates - an object with values for name and/or password
    * Updates this user and returns updated user 
    */
-  async updateUser (updates){
+  async updateUser (currentPassword, updates){
+    if (currentPassword !== this.password){
+      throw new error(`Incorrect Password`);
+    }
+
     const result = await axios({
       url: `${BASE_URL}/users/${this.username}`,
       method: 'PATCH',
