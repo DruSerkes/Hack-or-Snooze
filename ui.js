@@ -112,20 +112,7 @@ $(async function() {
       $myStories.append(result);
     }
     else{
-      for (let story of currentUser.ownStories){
-        let hostName = getHostName(story.url);
-        let star = isFavorite(story) ? "fas fa-star" : "far fa-star";
-        result = $(
-        `<li id='${story.storyId}'><span><i id='delete' class="far fa-trash-alt"></i> <span> <i id="favorite" class="${star}"></i> </span> </span>
-        <a class="article-link" href="${story.url}" target="a_blank">
-        <strong>${story.title}</strong>
-        </a>
-        <small class="article-author">by ${story.author}</small>
-        <small class="article-hostname ${hostName}">(${hostName})</small>
-        <small class="article-username">posted by ${story.username} <span id="edit"> <i class="far fa-edit"></i> </span> </small>
-        </li>`);
-        $myStories.append(result);
-      }
+      renderMyStories();
       // Edit Button
       for(let li of $myStories){
         // Handler for edit button animation on hover
@@ -171,7 +158,20 @@ $(async function() {
 
   // Helper function for rendering My stories List
   function renderMyStories(){
-    
+    for (let story of currentUser.ownStories){
+      let hostName = getHostName(story.url);
+      let star = isFavorite(story) ? "fas fa-star" : "far fa-star";
+      result = $(
+      `<li id='${story.storyId}'><span><i id='delete' class="far fa-trash-alt"></i> <span> <i id="favorite" class="${star}"></i> </span> </span>
+      <a class="article-link" href="${story.url}" target="a_blank">
+      <strong>${story.title}</strong>
+      </a>
+      <small class="article-author">by ${story.author}</small>
+      <small class="article-hostname ${hostName}">(${hostName})</small>
+      <small class="article-username">posted by ${story.username} <span id="edit"> <i class="far fa-edit"></i> </span> </small>
+      </li>`);
+      $myStories.append(result);
+    }
   }
 
   // Event listener for deleting a story 
