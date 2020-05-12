@@ -16,6 +16,7 @@ $(async function() {
   const $navMyStories = $('#nav-my-stories');
   const $myStories = $('#my-articles');
   const $allLists = $('#all-lists');
+  const $userProfile = $('#user-profile');
 
   // global storyList variable
   let storyList = null;
@@ -242,6 +243,9 @@ $(async function() {
     showNavForLoggedInUser();
   }
 
+
+  
+
   /**
    * A rendering function to call the StoryList.getStories static method,
    *  which will generate a storyListInstance. Then render it.
@@ -334,7 +338,8 @@ $(async function() {
       $createAccountForm,
       $createStoryForm,
       $favoriteArticles,
-      $myStories
+      $myStories,
+      $userProfile
     ];
     elementsArr.forEach($elem => $elem.hide());
   }
@@ -344,6 +349,9 @@ $(async function() {
     $navLogin.hide();
     $navMain.show();
     $navLogOut.show();
+    $('#nav-welcome').show();
+    $('#nav-user-profile').text(currentUser.username);
+    
   }
 
   /* simple function to pull the hostname from a URL */
