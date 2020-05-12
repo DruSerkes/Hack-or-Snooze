@@ -243,8 +243,13 @@ $(async function() {
     showNavForLoggedInUser();
   }
 
-
-  
+/* 
+ * Handler for clicking to view user profile
+ */
+  $('#nav-user-profile').on('click', function(evt) {
+    hideElements();
+    $userProfile.show();
+  })
 
   /**
    * A rendering function to call the StoryList.getStories static method,
@@ -257,6 +262,8 @@ $(async function() {
     // update our global variable
     storyList = storyListInstance;
     // empty out that part of the page
+    hideElements();
+    $allStoriesList.show();
     $allStoriesList.empty();
 
     // loop through all of our stories and generate HTML for them
