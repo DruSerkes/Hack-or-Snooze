@@ -105,6 +105,7 @@ $(async function() {
   $navMyStories.on('click', function(evt){
     hideElements();
     $myStories.empty();
+    
 
     if(currentUser.ownStories.length === 0){
       result = $('<p>No stories added!</p>');
@@ -113,21 +114,47 @@ $(async function() {
     else{
       for (let story of currentUser.ownStories){
         let hostName = getHostName(story.url);
+        let star = isFavorite(story) ? "fas fa-star" : "far fa-star";
         result = $(
-        `<li id='${story.storyId}'><span><i id='delete' class="far fa-trash-alt"></i></span>
+        `<li id='${story.storyId}'><span><i id='delete' class="far fa-trash-alt"></i> <span> <i id="favorite" class="${star}"></i> </span> </span>
         <a class="article-link" href="${story.url}" target="a_blank">
         <strong>${story.title}</strong>
         </a>
         <small class="article-author">by ${story.author}</small>
         <small class="article-hostname ${hostName}">(${hostName})</small>
-        <small class="article-username">posted by ${story.username}</small>
+        <small class="article-username">posted by ${story.username} <span id="edit"> <i class="far fa-edit"></i> </span> </small>
         </li>`);
         $myStories.append(result);
       }
+      // Edit Button
+      for(let li of $myStories){
+        // Event Listener for edit button Animation
+        $('ul li small span > i').hover(function(){
+          $(this).removeClass('far');
+          $(this).addClass('fas');
+          }, function(){
+          $(this).addClass('far');
+          $(this).removeClass('fas');
+        });
+        $('ul li small span > i').on('click', function(evt){
+          
+        })
+      }
+
     }
     
     $myStories.show();
   });
+
+//   // Event listener for edit button animation
+//   $('ul li small span > i').hover(function(){
+//     $(this).removeClass('far');
+//     $(this).addClass('fas');
+// }, function(){
+//     $(this).addClass('far');
+//     $(this).removeClass('fas');
+// });
+  
 
   // Event listener for deleting a story 
   $myStories.on('click', '.fa-trash-alt', async function (evt) {
