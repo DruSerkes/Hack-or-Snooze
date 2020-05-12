@@ -80,6 +80,28 @@ class StoryList {
     
     return deletedStory;
   }
+
+  /* 
+   * Method to make a PATCH request to /stories and update the story
+   * - user - current instance of User who will update the story
+   * - storyId - story to Update
+   * - updates - object with updates to story 
+  */
+    // **** pass in user instead
+    async updateStory(user, storyId, updates){
+      // make patch request 
+      const response = await axios({
+        url: `${BASE_URL}/stories/${storyId}`,
+        method: "PATCH",
+        data: {
+          token: user.loginToken,
+          story: updates
+        }
+      });
+      // get updated information 
+      const updatedUserInfo = await user.getUserInfo();
+      return updatedUserInfo;
+    }
 }
 
 
@@ -226,23 +248,6 @@ class User {
     await this.getUserInfo();
     return this;
   }
-
-  // Update a Story  - **** Move this to storyList class & pass in user instead?
-  async updateStory(storyId, updates){
-    // make patch request 
-    const response = await axios({
-      url: `${BASE_URL}/stories/${storyId}`,
-      method: "PATCH",
-      data: {
-        token: this.loginToken,
-        story: updates
-      }
-    });
-    // get updated information 
-    await this.getUserInfo();
-    return this;
-  }
-
 }
 
 /**

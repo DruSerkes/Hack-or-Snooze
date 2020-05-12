@@ -24,6 +24,9 @@ $(async function() {
   // global currentUser variable
   let currentUser = null;
 
+  // global clickedStory variable 
+  let clickedStory = null;
+
   await checkIfLoggedIn();
 
   /**
@@ -133,7 +136,7 @@ $(async function() {
       </li>`);
       $myStories.append(result);
     }
-    
+
     // Edit button hover animation
     for(let li of $myStories){
       $('ul li small span > i').hover(function(){
@@ -144,42 +147,36 @@ $(async function() {
         $(this).removeClass('fas');
       });
     }
-
-    // Handler to reveal edit story form 
-    $('ul li small span > i').on('click', function(evt){
-      $('#edit-story').slideDown();
-      console.log($(this), ' has been clicked!');
-  })
   }
   
-
-  // TODO Handler for click to reveal edit story form 
-  
+  // Handler for edit story form reveal 
+  $myStories.on('click', 'i', function(evt){
+    $('#edit-story').slideDown();
     // Grab the ID
-    // let storyId = $('this').closest('li').attr('id');
-    // // Handler for form submit 
-    // $('#edit-story').on('submit', async function(evt){
-    //   event.preventDefault();
-      
-    //   // Grab the info to update
-    //   let title = $('#edited-title').val();
-    //   let author = $('#edited-author').val();
-    //   let url = $('#edited-url').val();
-    //   let updates = {
-    //     title,
-    //     author,
-    //     url,
-    //   }
+    clickedStory = $('this').closest('li').attr('id');
+  }) 
 
-    //   // Patch request
-    //   await currentUser.updateStory(storyId, updates);
+  // TODO Handler for form submit 
+  $('#edit-story').on('submit', async function(evt){
+    event.preventDefault();
+    
+    // Grab the info to update
+    let title = $('#edited-title').val();
+    let author = $('#edited-author').val();
+    let url = $('#edited-url').val();
+    let updates = {
+      title,
+      author,
+      url,
+    }
 
-    //   //Update DOM 
-    //   $('#edit-story').slideUp();
-    //   renderMyStories();
-    // })
-  // }) 
+    // Patch request
+    await storyList.updateStory(currentUser, clickedStory, updates);
 
+    //Update DOM 
+    $('#edit-story').slideUp();
+    renderMyStories();
+  })
 
   // Event listener for deleting a story 
   $myStories.on('click', '.fa-trash-alt', async function (evt) {
