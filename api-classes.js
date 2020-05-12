@@ -254,12 +254,8 @@ class User {
    * - updates - an object with values for name and/or password
    * Updates this user and returns updated user 
    */
-  async updateUser (currentPassword, updates){
-    if (currentPassword !== this.password){
-      throw new error(`Incorrect Password`);
-    }
-
-    const result = await axios({
+  async updateUser (updates){
+    const response = await axios({
       url: `${BASE_URL}/users/${this.username}`,
       method: 'PATCH',
       data: {
@@ -268,10 +264,12 @@ class User {
       }
     });
 
-    this.name = response.data.user.name;
-    this.password = response.data.user.password;
-    this.updatedAt = response.data.user.updatedAt;
-
+    // this.name = response.data.user.name;
+    // this.password = response.data.user.password;
+    // this.updatedAt = response.data.user.updatedAt;
+    await this.getUserInfo();
+    this.password = updates.password;
+    
     return this;
   }
 }

@@ -217,7 +217,10 @@ $(async function() {
   })
 
 
-  // Event listener for creating a new story 
+  /* 
+   * Handler for creating a new story 
+   */
+
   $createStoryForm.on('submit', async function(evt) {
     evt.preventDefault(); // no page refresh
 
@@ -321,20 +324,84 @@ $(async function() {
 
     // update the navigation bar
     showNavForLoggedInUser();
-
-    //fill in user profile
-    $('#profile-name').text(`Name: ${currentUser.name}`);
-    $('#profile-username').text(`Username: ${currentUser.username}`);
-    $('#profile-account-date').text(`Account Created: ${currentUser.createdAt}`);
   }
 
-/* 
- * Handler for clicking to view user profile
- */
+  /* 
+   * USER PROFILE SECTION
+   */ 
+
+  // helper function to render user profile 
+  function makeUserProfile(){
+    $('#profile-name').text(`Name: ${currentUser.name}`);
+    $('#profile-username').text(`Username: ${currentUser.username}`);
+    $('#profile-account-date').text(`Account Created: ${currentUser.createdAt}`)
+  }
+
+  // Handle click to view profile 
   $('#nav-user-profile').on('click', function(evt) {
+    makeUserProfile();
     hideElements();
     $userProfile.show();
   })
+
+  /* 
+   * Updating name and password
+   */
+
+   // Handle click to show form 
+   $('#show-update-user').on('click', function(evt){
+     $updateUserForm.slideDown();
+   })
+
+   //Handle form submit 
+   $updateUserForm.on('submit', async function(evt){
+      evt.preventDefault();
+      
+      //make sure user is logged in 
+      if (!currentUser){
+        alert (`You must be logged in to do that.`);
+        return;
+      }
+
+      //grab values 
+      let name = $('#new-name').val();
+      let password = $('#new-password').val();
+      let passwordAgain = $('#new-password-again').val();
+
+      // Check new password was typed the same both times 
+      if (password !== passwordAgain){
+        alert (`Passwords must match`);
+        return;
+      }
+      
+      // get updates object
+      let updates = generateUserUpdate(name, password);
+      // pass to patch request 
+      let updatedUser = await currentUser.updateUser(updates);
+      // set global currentUser = to updatedUser
+      currentUser = updatedUser;
+
+      // Update the DOM 
+      $updateUserForm.trigger('reset');
+      $updateUserForm.slideUp();
+      makeUserProfile();
+   })
+
+   function generateUserUpdate(name, password){
+     let updates = {
+       name,
+       password
+     }
+     if(name === ''){
+       delete updates.name;
+     }
+     if(password === ''){
+       delete updates.password;
+     }
+     return updates
+   }
+
+   // TODO 
 
   /**
    * A rendering function to call the StoryList.getStories static method,
@@ -431,7 +498,8 @@ $(async function() {
       $createStoryForm,
       $favoriteArticles,
       $myStories,
-      $userProfile
+      $userProfile, 
+      $updateUserForm
     ];
     elementsArr.forEach($elem => $elem.hide());
   }
