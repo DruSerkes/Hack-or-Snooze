@@ -248,6 +248,28 @@ class User {
     await this.getUserInfo();
     return this;
   }
+
+  /* 
+   * A PATCH method for a user to change NAME and PASSWORD 
+   * - updates - an object with values for name and/or password
+   * Updates this user and returns updated user 
+   */
+  async updateUser (updates){
+    const result = await axios({
+      url: `${BASE_URL}/users/${this.username}`,
+      method: 'PATCH',
+      data: {
+        token: this.loginToken,
+        user: updates
+      }
+    });
+
+    this.name = response.data.user.name;
+    this.password = response.data.user.password;
+    this.updatedAt = response.data.user.updatedAt;
+
+    return this;
+  }
 }
 
 /**
