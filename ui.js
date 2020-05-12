@@ -150,7 +150,7 @@ $(async function() {
   }
   
   // Handler for edit story form reveal 
-  $myStories.on('click', 'i', function(evt){
+  $myStories.on('click', '#edit', function(evt){
     $('#edit-story').slideDown();
     // Grab the ID
     clickedStory = $('this').closest('li').attr('id');
