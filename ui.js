@@ -128,7 +128,7 @@ $(async function() {
       }
       // Edit Button
       for(let li of $myStories){
-        // Event Listener for edit button Animation
+        // Handler for edit button animation on hover
         $('ul li small span > i').hover(function(){
           $(this).removeClass('far');
           $(this).addClass('fas');
@@ -136,25 +136,43 @@ $(async function() {
           $(this).addClass('far');
           $(this).removeClass('fas');
         });
+        // Handler for click to reveal edit story form 
         $('ul li small span > i').on('click', function(evt){
-          
+          // Show edit story form 
+          $('#edit-story').slideDown();
+          // Grab the ID
+          let storyId = $('this').closest('li').attr('id');
+          // Handler for form submit 
+          $('#edit-story').on('submit', async function(evt){
+            event.preventDefault();
+            
+            // Grab the info to update
+            let title = $('#edited-title').val();
+            let author = $('#edited-author').val();
+            let url = $('#edited-url').val();
+            let updates = {
+              title,
+              author,
+              url,
+            }
+
+            // Patch request
+            await currentUser.updateStory(storyId, updates);
+
+            //Update DOM 
+            $('#edit-story').slideUp();
+            // re-render $myStories  - write a function for this part?
+          })
         })
       }
-
     }
-    
     $myStories.show();
   });
 
-//   // Event listener for edit button animation
-//   $('ul li small span > i').hover(function(){
-//     $(this).removeClass('far');
-//     $(this).addClass('fas');
-// }, function(){
-//     $(this).addClass('far');
-//     $(this).removeClass('fas');
-// });
-  
+  // Helper function for rendering My stories List
+  function renderMyStories(){
+    
+  }
 
   // Event listener for deleting a story 
   $myStories.on('click', '.fa-trash-alt', async function (evt) {

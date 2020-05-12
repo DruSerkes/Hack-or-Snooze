@@ -230,10 +230,14 @@ class User {
   // Update a Story 
   async updateStory(storyId, updates){
     // make patch request 
-    const response = await axios.patch(`${BASE_URL}/${storyId}`, {data: {
-      token: this.loginToken,
-      story: updates
-    }});
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "PATCH",
+      data: {
+        token: this.loginToken,
+        story: updates
+      }
+    });
     // get updated information 
     await this.getUserInfo();
     return this;
