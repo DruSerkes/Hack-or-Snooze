@@ -113,16 +113,6 @@ $(async function() {
     }
     else{
       renderMyStories();
-      // Edit Button
-      for(let li of $myStories){
-        // Handler for edit button animation on hover
-        $('ul li small span > i').hover(function(){
-          $(this).removeClass('far');
-          $(this).addClass('fas');
-          }, function(){
-          $(this).addClass('far');
-          $(this).removeClass('fas');
-        });
         // Handler for click to reveal edit story form 
         $('ul li small span > i').on('click', function(evt){
           // Show edit story form 
@@ -152,11 +142,10 @@ $(async function() {
           })
         })
       }
-    }
-    $myStories.show();
+      $myStories.show();
   });
 
-  // Helper function for rendering My stories List
+  // Helper function for rendering My Stories 
   function renderMyStories(){
     for (let story of currentUser.ownStories){
       let hostName = getHostName(story.url);
@@ -172,7 +161,19 @@ $(async function() {
       </li>`);
       $myStories.append(result);
     }
+    // Edit button hover animation
+    for(let li of $myStories){
+      $('ul li small span > i').hover(function(){
+        $(this).removeClass('far');
+        $(this).addClass('fas');
+        }, function(){
+        $(this).addClass('far');
+        $(this).removeClass('fas');
+      });
+    }
   }
+
+  //Helper function for  
 
   // Event listener for deleting a story 
   $myStories.on('click', '.fa-trash-alt', async function (evt) {
