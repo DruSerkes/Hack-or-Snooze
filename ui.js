@@ -159,7 +159,6 @@ $(async function() {
   // TODO Handler for form submit 
   $('#edit-story').on('submit', async function(evt){
     event.preventDefault();
-    
     // Grab the info to update
     let title = $('#edited-title').val();
     let author = $('#edited-author').val();
@@ -169,12 +168,16 @@ $(async function() {
       author,
       url,
     }
-
     // Patch request
     await storyList.updateStory(currentUser, clickedStory, updates);
 
-    //Update DOM 
+    //  Update DOM 
+    // Get rid of the form  
     $('#edit-story').slideUp();
+    $('#edited-title').trigger("reset");
+    $('#edited-author').trigger("reset");
+    $('#edited-url').trigger("reset");
+    // TODO update the stories.... 
     renderMyStories();
   })
 
