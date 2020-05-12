@@ -39,11 +39,16 @@ $(async function() {
     const password = $("#login-password").val();
 
     // call the login static method to build a user instance
-    const userInstance = await User.login(username, password);
-    // set the global user to the user instance
-    currentUser = userInstance;
-    syncCurrentUserToLocalStorage();
-    loginAndSubmitForm();
+    try {
+      const userInstance = await User.login(username, password);
+      // set the global user to the user instance
+      currentUser = userInstance;
+      syncCurrentUserToLocalStorage();
+      loginAndSubmitForm();
+    } catch(e) {
+      alert (`Invalid login. Please try again.`);
+    }
+    
   });
 
   /**
@@ -60,10 +65,14 @@ $(async function() {
     let password = $("#create-account-password").val();
 
     // call the create method, which calls the API and then builds a new user instance
-    const newUser = await User.create(username, password, name);
-    currentUser = newUser;
-    syncCurrentUserToLocalStorage();
-    loginAndSubmitForm();
+    try{
+      const newUser = await User.create(username, password, name);
+      currentUser = newUser;
+      syncCurrentUserToLocalStorage();
+      loginAndSubmitForm();
+    } catch (e){
+      alert (`That username is already taken - please try another!`);
+    }
   });
 
 
@@ -241,6 +250,11 @@ $(async function() {
 
     // update the navigation bar
     showNavForLoggedInUser();
+
+    //fill in user profile
+    $('#profile-name').text(`Name: ${currentUser.name}`);
+    $('#profile-username').text(`Username: ${currentUser.username}`);
+    $('#profile-account-date').text(`Account Created: ${currentUser.createdAt}`);
   }
 
 /* 
