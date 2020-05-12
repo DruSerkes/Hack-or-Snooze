@@ -105,7 +105,6 @@ $(async function() {
   $navMyStories.on('click', function(evt){
     hideElements();
     $myStories.empty();
-    
 
     if(currentUser.ownStories.length === 0){
       result = $('<p>No stories added!</p>');
@@ -113,40 +112,13 @@ $(async function() {
     }
     else{
       renderMyStories();
-        // Handler for click to reveal edit story form 
-        $('ul li small span > i').on('click', function(evt){
-          // Show edit story form 
-          $('#edit-story').slideDown();
-          // Grab the ID
-          let storyId = $('this').closest('li').attr('id');
-          // Handler for form submit 
-          $('#edit-story').on('submit', async function(evt){
-            event.preventDefault();
-            
-            // Grab the info to update
-            let title = $('#edited-title').val();
-            let author = $('#edited-author').val();
-            let url = $('#edited-url').val();
-            let updates = {
-              title,
-              author,
-              url,
-            }
-
-            // Patch request
-            await currentUser.updateStory(storyId, updates);
-
-            //Update DOM 
-            $('#edit-story').slideUp();
-            // re-render $myStories  - write a function for this part?
-          })
-        })
       }
-      $myStories.show();
+    $myStories.show();
   });
 
   // Helper function for rendering My Stories 
   function renderMyStories(){
+    $myStories.empty();
     for (let story of currentUser.ownStories){
       let hostName = getHostName(story.url);
       let star = isFavorite(story) ? "fas fa-star" : "far fa-star";
@@ -161,6 +133,7 @@ $(async function() {
       </li>`);
       $myStories.append(result);
     }
+    
     // Edit button hover animation
     for(let li of $myStories){
       $('ul li small span > i').hover(function(){
@@ -171,9 +144,42 @@ $(async function() {
         $(this).removeClass('fas');
       });
     }
-  }
 
-  //Helper function for  
+    // Handler to reveal edit story form 
+    $('ul li small span > i').on('click', function(evt){
+      $('#edit-story').slideDown();
+      console.log($(this), ' has been clicked!');
+  })
+  }
+  
+
+  // TODO Handler for click to reveal edit story form 
+  
+    // Grab the ID
+    // let storyId = $('this').closest('li').attr('id');
+    // // Handler for form submit 
+    // $('#edit-story').on('submit', async function(evt){
+    //   event.preventDefault();
+      
+    //   // Grab the info to update
+    //   let title = $('#edited-title').val();
+    //   let author = $('#edited-author').val();
+    //   let url = $('#edited-url').val();
+    //   let updates = {
+    //     title,
+    //     author,
+    //     url,
+    //   }
+
+    //   // Patch request
+    //   await currentUser.updateStory(storyId, updates);
+
+    //   //Update DOM 
+    //   $('#edit-story').slideUp();
+    //   renderMyStories();
+    // })
+  // }) 
+
 
   // Event listener for deleting a story 
   $myStories.on('click', '.fa-trash-alt', async function (evt) {

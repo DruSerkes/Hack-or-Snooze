@@ -227,7 +227,7 @@ class User {
     return this;
   }
 
-  // Update a Story 
+  // Update a Story  - **** Move this to storyList class & pass in user instead?
   async updateStory(storyId, updates){
     // make patch request 
     const response = await axios({
