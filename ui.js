@@ -17,15 +17,13 @@ $(async function() {
   const $myStories = $('#my-articles');
   const $allLists = $('#all-lists');
   const $userProfile = $('#user-profile');
+  const $editStoryForm = $('#edit-story'); 
 
   // global storyList variable
   let storyList = null;
 
   // global currentUser variable
   let currentUser = null;
-
-  // global clickedStory variable 
-  let clickedStory = null;
 
   await checkIfLoggedIn();
 
@@ -132,7 +130,7 @@ $(async function() {
       </a>
       <small class="article-author">by ${story.author}</small>
       <small class="article-hostname ${hostName}">(${hostName})</small>
-      <small class="article-username">posted by ${story.username} <span id="edit"> <i class="far fa-edit"></i> </span> </small>
+      <small class="article-username">posted by ${story.username} <span data-id=${story.storyId} id="edit"> <i class="far fa-edit"></i> </span> </small>
       </li>`);
       $myStories.append(result);
     }
@@ -151,35 +149,55 @@ $(async function() {
   
   // Handler for edit story form reveal 
   $myStories.on('click', '#edit', function(evt){
-    $('#edit-story').slideDown();
-    // Grab the ID
-    clickedStory = $('this').closest('li').attr('id');
+    $editStoryForm.slideDown();
+    // Set form data-id to clicked story id 
+    let clickedStoryId = $(this).closest('li').attr('id');
+    $editStoryForm.attr('data-id', clickedStoryId);
   }) 
 
-  // TODO Handler for form submit 
-  $('#edit-story').on('submit', async function(evt){
+  // Handler for form submit 
+  $editStoryForm.on('submit', async function(evt){
     event.preventDefault();
     // Grab the info to update
+    let storyId = $editStoryForm.attr('data-id'); //why is this returning undefined
     let title = $('#edited-title').val();
     let author = $('#edited-author').val();
     let url = $('#edited-url').val();
-    let updates = {
-      title,
-      author,
-      url,
-    }
+    let updates = generateUpdates(title, author, url);
+
     // Patch request
-    await storyList.updateStory(currentUser, clickedStory, updates);
+    const updatedUserInfo = await storyList.updateStory(currentUser, storyId, updates);
+
+    // Update the currentUser
+    currentUser = updatedUserInfo;
 
     //  Update DOM 
-    // Get rid of the form  
     $('#edit-story').slideUp();
     $('#edited-title').trigger("reset");
     $('#edited-author').trigger("reset");
     $('#edited-url').trigger("reset");
-    // TODO update the stories.... 
     renderMyStories();
   })
+
+
+  // Helper function to create updates object 
+  function generateUpdates(title, author, url){
+    let updates = {
+      title,
+      author,
+      url
+    }
+    if(updates.title === ''){
+      delete updates.title;
+    }
+    if(updates.author === ''){
+      delete updates.author;
+    }
+    if(updates.url.slice(0, 7) !== 'http://' || updates.url.slice(0, 8) !== 'https://'){
+      delete updates.url;
+    }
+    return updates;
+  }
 
   // Event listener for deleting a story 
   $myStories.on('click', '.fa-trash-alt', async function (evt) {
