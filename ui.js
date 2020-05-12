@@ -18,6 +18,7 @@ $(async function() {
   const $allLists = $('#all-lists');
   const $userProfile = $('#user-profile');
   const $editStoryForm = $('#edit-story'); 
+  const $updateUserForm = $('#update-user');
 
   // global storyList variable
   let storyList = null;
