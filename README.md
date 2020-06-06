@@ -1,5 +1,7 @@
 This is a Hacker News clone
 
+Link to project: https://druserkes.github.io/Hack-or-Snooze/
+
 
 ** What this project was about:
 
